@@ -5,10 +5,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export abstract class BaseAbstractEntity {
-  @PrimaryGeneratedColumn('increment')
-  id: number;
-
+export abstract class BaseAbstractWithOutIDEntity {
   @Column()
   @CreateDateColumn({
     type: 'timestamp',
@@ -32,4 +29,9 @@ export abstract class BaseAbstractEntity {
     nullable: true,
   })
   last_modified_by: number;
+}
+
+export abstract class BaseAbstractEntity extends BaseAbstractWithOutIDEntity {
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 }

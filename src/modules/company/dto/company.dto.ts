@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCompanyDTO {
   @ApiProperty({ example: 'company exmaple' })
@@ -11,6 +11,10 @@ export class CreateCompanyDTO {
   @IsNotEmpty()
   @IsString()
   code: string;
+
+  @ApiProperty({ example: [1, 2] })
+  @IsArray({})
+  branchids: number[];
 }
 
 export class UpdateCompanyDTO extends PartialType(CreateCompanyDTO) {}

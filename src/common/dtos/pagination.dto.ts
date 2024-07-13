@@ -7,12 +7,12 @@ export class PaginationDTO {
     default: 1,
   })
   @IsOptional()
-  page: number;
+  page?: number;
 
   @ApiProperty({
     required: false,
     default: 10,
   })
   @IsOptional()
-  limit: number;
+  limit?: number;
 }

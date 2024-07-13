@@ -7,9 +7,22 @@ import {
   DB_PORT,
   DB_USERNAME,
 } from 'src/environments';
+import { BranchEntity } from 'src/modules/company/branch/entities/branch.entity';
 import { CompanyEntity } from 'src/modules/company/entities/company.entity';
-import { UserEntity } from 'src/modules/user/entities/user.entity';
-const entities = [CompanyEntity, UserEntity];
+import { PermissionEntity } from 'src/modules/user-management/permission/entities/permission.entity';
+import {
+  RoleEntity,
+  RolePermissionEntity,
+} from 'src/modules/user-management/role/entities/role.entity';
+import { UserEntity } from 'src/modules/user-management/user/entities/user.entity';
+const entities = [
+  CompanyEntity,
+  UserEntity,
+  BranchEntity,
+  PermissionEntity,
+  RoleEntity,
+  RolePermissionEntity,
+];
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({

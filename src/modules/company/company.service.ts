@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { BranchService } from './branch/branch.service';
 import { CreateCompanyDTO, UpdateCompanyDTO } from './dto/company.dto';
 import { CompanyEntity } from './entities/company.entity';
 
@@ -9,6 +10,7 @@ export class CompanyService {
   constructor(
     @InjectRepository(CompanyEntity)
     private readonly companyRepo: Repository<CompanyEntity>,
+    private readonly branchService: BranchService,
   ) {}
 
   getOne(id: number) {
@@ -19,8 +21,26 @@ export class CompanyService {
     return this.companyRepo.find();
   }
 
-  create(createCompanyDTO: CreateCompanyDTO) {
-    return this.companyRepo.save(this.companyRepo.create(createCompanyDTO));
+  async create(createCompanyDTO: CreateCompanyDTO) {
+    // create company
+    const { branchids, ...companyData } = createCompanyDTO;
+    const company = await this.companyRepo.save(
+      this.companyRepo.create(companyData),
+    );
+    // check branchIds is exist
+    if (branchids?.length === 0) return company;
+    // pull data of branch from database by branchIds
+    const branches = await this.branchService.findByIds(branchids);
+    // true => save companyId to branchEntity
+    const branchesAfterSave = await Promise.all(
+      branches.map((branch) => {
+        branch.companyId = company.id;
+        return this.branchService.save(branch);
+      }),
+    );
+    // format data
+    company.branches = branchesAfterSave;
+    return company;
   }
 
   async update(id: number, updateCompanyDTO: UpdateCompanyDTO) {
