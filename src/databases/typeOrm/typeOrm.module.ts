@@ -39,7 +39,7 @@ const entities = [
         database: DB_DATABASE,
         entities,
         synchronize: true,
-        logging: false,
+        logging: true,
         // logger: new DBLogger(),
       }),
     }),

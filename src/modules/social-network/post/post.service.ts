@@ -27,16 +27,26 @@ export class PostService {
   }
 
   async find(queryPostDto: QueryPostDto) {
-    const { queryFilter, page, limit } = queryPostDto;
-    const queryBuidler = this.postRepo.createQueryBuilder('posts');
-
-    if (queryFilter) {
-      queryBuidler.where('posts.title ILIKE :query', {
-        query: `%${queryFilter}%`,
+    const { title, content, orderByColum, sortBy, page, limit } = queryPostDto;
+    const queryBuidler = this.postRepo
+      .createQueryBuilder('posts')
+      .leftJoinAndSelect('posts.comments', 'comments');
+    if (title) {
+      queryBuidler.andWhere('posts.title ILIKE :title', {
+        title: `%${title}%`,
       });
     }
-    const posts = await pagination(page, limit, queryBuidler);
 
+    if (content) {
+      queryBuidler.andWhere('posts.content ILIKE :content', {
+        content: `%${content}%`,
+      });
+    }
+    if (orderByColum || sortBy) {
+      queryBuidler.orderBy(`posts.${orderByColum}`, sortBy);
+    }
+
+    const posts = await pagination(page, limit, queryBuidler);
     return posts;
   }
 

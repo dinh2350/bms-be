@@ -1,7 +1,9 @@
+import { SelectQueryBuilder } from 'typeorm';
+
 export const pagination = async (
   page: number,
   limit: number,
-  queryBuidler: any,
+  queryBuidler: SelectQueryBuilder<unknown>,
 ) => {
   if (page && limit) {
     const offset = limit * page - limit;
