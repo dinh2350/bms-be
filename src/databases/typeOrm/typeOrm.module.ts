@@ -9,6 +9,8 @@ import {
 } from 'src/environments';
 import { BranchEntity } from 'src/modules/company/branch/entities/branch.entity';
 import { CompanyEntity } from 'src/modules/company/entities/company.entity';
+import { CommentEntity } from 'src/modules/social-network/comment/entities/comment.entity';
+import { PostEntity } from 'src/modules/social-network/post/entities/post.entity';
 import { PermissionEntity } from 'src/modules/user-management/permission/entities/permission.entity';
 import {
   RoleEntity,
@@ -22,6 +24,8 @@ const entities = [
   PermissionEntity,
   RoleEntity,
   RolePermissionEntity,
+  PostEntity,
+  CommentEntity,
 ];
 @Module({
   imports: [
@@ -35,7 +39,7 @@ const entities = [
         database: DB_DATABASE,
         entities,
         synchronize: true,
-        logging: false,
+        logging: true,
         // logger: new DBLogger(),
       }),
     }),
