@@ -10,6 +10,12 @@ export class UserEntity extends BaseAbstractEntity {
   @Column({ name: 'last_name' })
   lastName: string;
 
+  @Column({ name: 'user_name', unique: true })
+  userName: string;
+
+  @Column({ name: 'password' })
+  password: string;
+
   @Column()
   dob: Date;
 
