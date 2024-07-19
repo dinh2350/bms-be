@@ -26,7 +26,6 @@ export class PermissionController {
 
   @Get()
   find(@Query() queryPermissionDto: QueryPermissionDto) {
-    console.log(queryPermissionDto);
     return this.permissionService.find(queryPermissionDto);
   }
 

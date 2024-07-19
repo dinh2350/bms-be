@@ -23,7 +23,7 @@ export class PermissionService {
 
     const queryBuidler = this.permissionRepo.createQueryBuilder('permissions');
 
-    if (permissionIds?.length > 0) {
+    if (permissionIds && permissionIds.length > 0) {
       queryBuidler.where('permissions.id IN (:...permissionIds)', {
         permissionIds,
       });
