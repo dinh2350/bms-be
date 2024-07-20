@@ -47,8 +47,11 @@ export class UserService {
     };
   }
 
-  findOneByUserName(userName: string) {
-    return this.userRepo.findOneBy({ userName });
+  async findOneByUserName(userName: string) {
+    const user = await this.userRepo.findOneBy({ userName });
+    if (!user)
+      throw new HttpException('Username not found', HttpStatus.NOT_FOUND);
+    return user;
   }
 
   findOne(id: number) {
