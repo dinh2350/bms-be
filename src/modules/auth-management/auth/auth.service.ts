@@ -21,6 +21,8 @@ export class AuthService {
   async signIn(signInDto: SignInDto) {
     const { username, password } = signInDto;
     const user = await this.userService.findOneByUserName(username);
+    if (!user)
+      throw new HttpException('Username incorrect', HttpStatus.BAD_REQUEST);
     const isValidPassword = await comparePassword(password, user.password);
     if (!isValidPassword)
       throw new HttpException('Password incorrect!', HttpStatus.BAD_REQUEST);
