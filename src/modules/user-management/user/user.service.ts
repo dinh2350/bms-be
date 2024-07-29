@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { handleHashPassword } from 'src/common/security/hash.security';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { QueryUserDto } from './dto/query-user.dto';
@@ -13,7 +14,15 @@ export class UserService {
     private readonly userRepo: Repository<UserEntity>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
+    const user = await this.findOneByUserName(createUserDto.userName);
+    if (user)
+      throw new HttpException(
+        'User name must be unique!',
+        HttpStatus.BAD_REQUEST,
+      );
+    const password = await handleHashPassword(createUserDto.password);
+    createUserDto.password = password;
     return this.userRepo.save(this.userRepo.create(createUserDto));
   }
 
@@ -36,6 +45,11 @@ export class UserService {
       total: totalUser,
       list: userList,
     };
+  }
+
+  async findOneByUserName(userName: string) {
+    const user = await this.userRepo.findOneBy({ userName });
+    return user;
   }
 
   findOne(id: number) {
